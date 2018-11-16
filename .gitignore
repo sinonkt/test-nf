@@ -1,0 +1,6 @@
+work
+.nextflow
+.nextflow.*
+logs
+*.dot
+*.png

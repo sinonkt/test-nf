@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+ROOT_DIR=$(dirname $0)/..
+
+# ************** test normal parameters *****************
+nextflow run main.nf --test \
+  --numSimulatedContentA 1 \
+  --numSimulatedContentB 2 \
+  --numSimulatedContentC 3 \
+  --itersA 5 \
+  --itersB 5 \
+  --itersC 5 \
+  --filesGlob "${ROOT_DIR}/tests/*.txt" \
+  --filePath ${ROOT_DIR}/tests/data2.txt
+
+# ************** test equally likely *****************
+nextflow run main.nf --test \
+  --numSimulatedContentA 3 \
+  --numSimulatedContentB 3 \
+  --numSimulatedContentC 3 \
+  --itersA 5 \
+  --itersB 5 \
+  --itersC 5 \
+  --filesGlob "${ROOT_DIR}/tests/*.txt" \
+  --filePath ${ROOT_DIR}/tests/data2.txt

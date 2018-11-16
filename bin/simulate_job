@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+processName=$1
+contentId=$2
+signature="${processName}_${contentId}"
+iters=$3
+i=0
+echo "START:$signature"
+while [ $i -lt $iters ]
+do
+sleep 1
+echo "DEBUG:$i:$signature:$(date)"
+>&2 echo "ERROR:$i:$signature:$(date)"
+i=$[$i+1]
+done
+echo "END:$signature"

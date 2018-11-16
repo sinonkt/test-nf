@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+E_OUTPUT_ERROR=901
+
+if ! [[ $(cat $1) =~ ^[0-9]+$ ]]; then
+  description="a.out should have only number"                    
+  echo "Assertion failed:  \"$description\""
+  exit $E_OUTPUT_ERROR
+fi
+
+exit $?
