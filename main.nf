@@ -14,11 +14,15 @@ params.user = 'test1'
 
 params.numSimulatedContentA = 1 // number of jobs
 params.numSimulatedContentB = 2
-params.numSimulatedContentC = 3
 
 params.itersA = 5 // seconds
 params.itersB = 5 
 params.itersC = 5 
+
+params.itersDependsOnA = 1
+params.itersDependsOnB = 1
+params.itersDependsOnC = 1
+params.itersDependsOnBothAandB = 1
 
 params.filesGlob = '/glob/for/example/*'
 params.filePath = '/path/for/example'
@@ -29,7 +33,11 @@ params.filePath = '/path/for/example'
 // ******************* Start Workflow ********************
 ContentsA = Channel.from(*(1..params.numSimulatedContentA))
 ContentsB = Channel.from(*(1..params.numSimulatedContentB))
-ContentsC = Channel.from(*(1..params.numSimulatedContentC))
+Channel
+  .fromPath(params.filesGlob)
+  .splitText() { it.trim() }
+  .flatten()
+  .set { ContentsC }
 
 process A {
 
@@ -43,23 +51,81 @@ process A {
   withTest(task)(
     '''
     simulate_job !{task.process} !{contentId} !{params.itersA} 
-    echo "!{contentIds}" > a.out
+    echo "!{contentId}" > a.out
+    ''',
+    '''
+    test_A a.out 
     '''
   )
 }
 
-// Channel.fromPath(params.filesGlob).println()
-// println(file(params.filePath).text)
+process B {
 
-// process C {
+  input:
+  val contentId from ContentsB
 
-// }
+  output:
+  set contentId, 'b.out' into DependsOnB
 
-// process dependsOnA {
+  shell:
+  withTest(task)(
+    '''
+    simulate_job !{task.process} !{contentId} !{params.itersB} 
+    echo "!{contentId}" > b.out
+    ''',
+    '''
+    test_B b.out 
+    '''
+  )
+}
+process C {
 
-// }
+  input:
+  val contentId from ContentsC
 
-// process dependsOnB {
+  output:
+  set contentId, 'c.out' into DependsOnC
+
+  shell:
+  withTest(task)(
+    '''
+    simulate_job !{task.process} !{contentId} !{params.itersC} 
+    echo "!{contentId}" > c.out
+    ''',
+    '''
+    test_C c.out 
+    '''
+  )
+}
+
+process dependsOnC {
+
+  stageInMode ''
+
+  input:
+  set contentId, 'c.out' from DependsOnC
+
+  output:
+  set contentId, "${contentId}.txt" into ResultC
+
+  shell:
+  filesByChar = contentId.toCharArray().collect{ "${it}.txt" }.join(' ')
+  withTest(task)(
+    '''
+    simulate_job !{task.process} !{contentId} !{params.itersDependsOnC} 
+    touch !{contentId}.txt
+    for char in !{contentId.toCharArray().join(' ')}
+    do
+      touch $char.txt
+    done
+    ''',
+    '''
+    test_dependsOnA !{contentId}.txt !{filesByChar}
+    '''
+  )
+}
+
+// process dependsOnLinkB {
 
 // }
 

@@ -2,7 +2,6 @@
 
 source 'test_common'
 
-testFileExists $1
-testOutputShouldBeNumber $1
+testFileExists "$@"
 
 exit $?

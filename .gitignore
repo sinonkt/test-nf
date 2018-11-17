@@ -4,3 +4,4 @@ work
 logs
 *.dot
 *.png
+*.png.*

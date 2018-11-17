@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+E_OUTPUT_ERROR=50
+E_ALL_FILE_EXIST_ERROR=51
+
+testOutputShouldBeNumber () {
+  filePath=$1
+  description="$1 should have only number"      
+  if ! [[ $(cat $1) =~ ^[0-9]+$ ]]; then              
+    echo "Assertion failed : ${FUNCNAME[0]} : \"$description\""
+    exit $E_OUTPUT_ERROR
+  fi
+  echo "${FUNCNAME[0]}: PASSED"
+}
+
+testOutputShouldBeString () {
+  filePath=$1
+  description="$1 should have only string"      
+  if ! [[ $(cat $1) =~ [^\d]* ]]; then              
+    echo "Assertion failed : ${FUNCNAME[0]} : \"$description\""
+    exit $E_OUTPUT_ERROR
+  fi
+  echo "${FUNCNAME[0]}: PASSED"
+}
+
+testFileExists() {
+  description="All files($@) listed should be exists"      
+  for file in "$@"
+  do
+    if [ ! -f $file ]; then
+      echo "Assertion failed : ${FUNCNAME[0]} : \"$description\""
+      exit $E_ALL_FILE_EXIST_ERROR
+    fi
+  done
+  echo "${FUNCNAME[0]}: PASSED"
+}
