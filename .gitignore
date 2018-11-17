@@ -2,6 +2,11 @@ work
 .nextflow
 .nextflow.*
 logs
+publish
+works
 *.dot
 *.png
 *.png.*
+*.dot.*
+!graph.png
+!graph.dot

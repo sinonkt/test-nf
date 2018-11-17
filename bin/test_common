@@ -32,5 +32,5 @@ testFileExists() {
       exit $E_ALL_FILE_EXIST_ERROR
     fi
   done
-  echo "${FUNCNAME[0]}: PASSED"
+  echo "${FUNCNAME[0]}: PASSED : $@"
 }

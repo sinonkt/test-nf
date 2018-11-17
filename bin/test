@@ -7,16 +7,20 @@ nextflow run main.nf \
   --test \
   --numSimulatedContentA 1 \
   --numSimulatedContentB 2 \
+  --publishDir $ROOT_DIR/publish \
   --itersA 5 \
   --itersB 5 \
-  --itersC 5 
+  --itersC 5 \
   --filesGlob "${ROOT_DIR}/tests/*.txt" \
-  --filePath ${ROOT_DIR}/tests/data2.txt
+  --filePath ${ROOT_DIR}/tests/data1.txt
 
 # ************** test equally likely *****************
-nextflow run main.nf --test \
+nextflow run main.nf \
+  -with-dag graph.dot \
+  --test \
   --numSimulatedContentA 3 \
   --numSimulatedContentB 3 \
+  --publishDir $ROOT_DIR/publish \
   --itersA 5 \
   --itersB 5 \
   --itersC 5 \

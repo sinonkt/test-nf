@@ -19,13 +19,13 @@ params.itersA = 5 // seconds
 params.itersB = 5 
 params.itersC = 5 
 
-params.itersDependsOnA = 1
-params.itersDependsOnB = 1
 params.itersDependsOnC = 1
 params.itersDependsOnBothAandB = 1
 
 params.filesGlob = '/glob/for/example/*'
 params.filePath = '/path/for/example'
+
+params.publishDir = '/path/to/publishDir'
 
 // ******************** End Params *********************
 
@@ -45,7 +45,7 @@ process A {
   val contentId from ContentsA
 
   output:
-  set contentId, 'a.out' into DependsOnA
+  set contentId, 'a.out' into ResultA
 
   shell:
   withTest(task)(
@@ -65,7 +65,7 @@ process B {
   val contentId from ContentsB
 
   output:
-  set contentId, 'b.out' into DependsOnB
+  set contentId, 'b.out' into ResultB
 
   shell:
   withTest(task)(
@@ -98,9 +98,30 @@ process C {
   )
 }
 
-process dependsOnC {
+ResultAandB = ResultA.mix(ResultB).groupTuple()
 
-  stageInMode ''
+process DependsOnBothAandB {
+
+  input:
+  set contentId, results from ResultAandB
+
+  output:
+  set contentId, 'mixed.out' into MixedResult
+
+  shell:
+  withTest(task)(
+    '''
+    simulate_job !{task.process} !{contentId} !{params.itersDependsOnBothAandB}
+    echo "##mixed_19" > mixed.out
+    ''',
+    '''
+    test_dependsOnBothAandB mixed.out !{results.join(' ')}
+    '''
+  )
+
+}
+
+process DependsOnC {
 
   input:
   set contentId, 'c.out' from DependsOnC
@@ -125,29 +146,29 @@ process dependsOnC {
   )
 }
 
-// process dependsOnLinkB {
+process FinalMerge {
 
-// }
+  publishDir "${params.publishDir}/final/${finalId}", mode: 'copy', overwrite: true
 
-// process dependsOnBothAandB {
+  input:
+  set mixedId, 'mixed.out', cId, "${cId}.txt" from MixedResult.merge(ResultC)
+  
+  output:
+  set finalId, "final.out" into FinalResult
 
-// }
+  shell:
+  finalId="${mixedId}_$cId"
+  withTest(task)(
+    '''
+    simulate_job !{task.process} !{finalId} 1
+    cat mixed.out !{cId}.txt > final.out
+    ''',
+    '''
+    test_FinalMerge final.out
+    '''
+  )
+}
 
-// process softlinkOnA {
-
-// }
-
-// process hardlinkOnB {
-
-// }
-
-// process publishBothAandB {
-
-// }
-
-// process mixDepADepBandDepBoth {
-
-// }
 
 
 // ******************* End Workflow ********************

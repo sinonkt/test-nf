@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+source 'test_common'
+
+testCustomOutput () {
+  filePath=$1
+  output=$(cat $1) 
+  description="$1 output should have pattern like ##mixed_19 got $output"      
+  if ! [[ $output =~ ^##[a-zA-Z]+_[0-9]+$ ]]; then              
+    echo "Assertion failed : ${FUNCNAME[0]} : \"$description\""
+    exit $E_OUTPUT_ERROR
+  fi
+  echo "${FUNCNAME[0]}: PASSED"
+}
+
+testFileExists $1 ${@:2}
+testCustomOutput $1
+
+exit $?

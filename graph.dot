@@ -1,0 +1,58 @@
+digraph "graph" {
+p0 [shape=point,label="",fixedsize=true,width=0.1,xlabel="Channel.from"];
+p5 [label="A"];
+p0 -> p5 [label="ContentsA"];
+
+p1 [shape=point,label="",fixedsize=true,width=0.1,xlabel="Channel.from"];
+p6 [label="B"];
+p1 -> p6 [label="ContentsB"];
+
+p2 [shape=point,label="",fixedsize=true,width=0.1,xlabel="Channel.fromPath"];
+p3 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="splitText"];
+p2 -> p3;
+
+p3 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="splitText"];
+p4 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="flatten"];
+p3 -> p4;
+
+p4 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="flatten"];
+p7 [label="C"];
+p4 -> p7 [label="ContentsC"];
+
+p5 [label="A"];
+p8 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="mix"];
+p5 -> p8 [label="ResultA"];
+
+p6 [label="B"];
+p8 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="mix"];
+p6 -> p8 [label="ResultB"];
+
+p7 [label="C"];
+p11 [label="DependsOnC"];
+p7 -> p11 [label="DependsOnC"];
+
+p8 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="mix"];
+p9 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="groupTuple"];
+p8 -> p9;
+
+p9 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="groupTuple"];
+p10 [label="DependsOnBothAandB"];
+p9 -> p10 [label="ResultAandB"];
+
+p10 [label="DependsOnBothAandB"];
+p12 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="merge"];
+p10 -> p12 [label="MixedResult"];
+
+p11 [label="DependsOnC"];
+p12 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="merge"];
+p11 -> p12 [label="ResultC"];
+
+p12 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="merge"];
+p13 [label="FinalMerge"];
+p12 -> p13;
+
+p13 [label="FinalMerge"];
+p14 [shape=point];
+p13 -> p14 [label="FinalResult"];
+
+}

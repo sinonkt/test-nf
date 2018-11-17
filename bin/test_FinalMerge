@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+source 'test_common'
+
+testFileExists $@
+
+exit $?
