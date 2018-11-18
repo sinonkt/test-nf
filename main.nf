@@ -145,11 +145,14 @@ process DependsOnBothAandB {
 
 process DependsOnC {
 
+  publishDir "${params.publishDir}/depC/${contentId}", mode: 'copy', overwrite: true , pattern: "*.txt"
+
   input:
   set contentId, 'c.out' from DependsOnC
 
   output:
   set contentId, "${contentId}.txt" into ResultC
+  set "*.txt" into DepCOutput
 
   shell:
   filesByChar = contentId.toCharArray().collect{ "${it}.txt" }.join(' ')

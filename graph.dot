@@ -40,19 +40,23 @@ p10 [label="DependsOnBothAandB"];
 p9 -> p10 [label="ResultAandB"];
 
 p10 [label="DependsOnBothAandB"];
-p12 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="merge"];
-p10 -> p12 [label="MixedResult"];
+p13 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="merge"];
+p10 -> p13 [label="MixedResult"];
 
 p11 [label="DependsOnC"];
-p12 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="merge"];
-p11 -> p12 [label="ResultC"];
+p13 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="merge"];
+p11 -> p13 [label="ResultC"];
 
-p12 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="merge"];
-p13 [label="FinalMerge"];
-p12 -> p13;
+p11 [label="DependsOnC"];
+p12 [shape=point];
+p11 -> p12 [label="DepCOutput"];
 
-p13 [label="FinalMerge"];
-p14 [shape=point];
-p13 -> p14 [label="FinalResult"];
+p13 [shape=circle,label="",fixedsize=true,width=0.1,xlabel="merge"];
+p14 [label="FinalMerge"];
+p13 -> p14;
+
+p14 [label="FinalMerge"];
+p15 [shape=point];
+p14 -> p15 [label="FinalResult"];
 
 }
