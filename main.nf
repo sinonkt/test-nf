@@ -1,4 +1,5 @@
 // ******************* Start Helpers ********************
+params.test=false
 def RESERVED_PARAMS=['test', 'publishDir', 'user', 'paramsSchema', 'uiSchema'] 
 def withTest = { task -> { sc, tsc = "test_${task.process}" ->
     def out = sc.trim()
