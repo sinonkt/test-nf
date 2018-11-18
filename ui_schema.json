@@ -1,0 +1,23 @@
+{
+  "itersA": {
+    "ui:widget": "range"
+  },
+  "itersB": {
+    "ui:widget": "range"
+  },
+  "itersC": {
+    "ui:widget": "range"
+  },
+  "itersDependsOnC": {
+    "ui:widget": "range"
+  },
+  "itersDependsOnBothAandB": {
+    "ui:widget": "range"
+  },
+  "numSimulatedContentA": {
+    "ui:widget": "range"
+  },
+  "numSimulatedContentB": {
+    "ui:widget": "range"
+  }
+}

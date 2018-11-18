@@ -1,5 +1,5 @@
 // ******************* Start Helpers ********************
-params.test
+def RESERVED_PARAMS=['test', 'publishDir', 'user', 'paramsSchema', 'uiSchema'] 
 def withTest = { task -> { sc, tsc = "test_${task.process}" ->
     def out = sc.trim()
     if (params.test) {
@@ -8,9 +8,31 @@ def withTest = { task -> { sc, tsc = "test_${task.process}" ->
     out
   }
 }
+def unifyParams = { params -> 
+  def output = []
+  params
+    .each { param, val ->
+      camelCase = param.replaceAll( "(-)([A-Za-z0-9])", { Object[] it -> it[2].toUpperCase() })
+      output.push(camelCase)
+    }
+    
+  output.unique().findAll({ !(it in RESERVED_PARAMS) })
+}
 
+if (params.containsKey('paramsSchema') && params.paramsSchema) {
+  print(file('params_schema.json').text)
+  exit 1
+}
+if (params.containsKey('uiSchema') && params.uiSchema) {
+  print(file('ui_schema.json').text)
+  exit 1
+}
+
+// ******************* End Helpers ********************
 // ******************** Start Params *********************
-params.user = 'test1'
+
+version='0.0.1'
+timestamp='20181118'
 
 params.numSimulatedContentA = 1 // number of jobs
 params.numSimulatedContentB = 2
@@ -25,8 +47,7 @@ params.itersDependsOnBothAandB = 1
 params.filesGlob = '/glob/for/example/*'
 params.filePath = '/path/for/example'
 
-params.publishDir = '/path/to/publishDir'
-
+println("All parameters:  " + unifyParams(params))
 // ******************** End Params *********************
 
 
@@ -148,7 +169,7 @@ process DependsOnC {
 
 process FinalMerge {
 
-  publishDir "${params.publishDir}/final/${finalId}", mode: 'copy', overwrite: true
+  publishDir "${params.publishDir}/final/${finalId}", mode: 'copy', overwrite: true , pattern: "*.out"
 
   input:
   set mixedId, 'mixed.out', cId, "${cId}.txt" from MixedResult.merge(ResultC)

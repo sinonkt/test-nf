@@ -1,0 +1,66 @@
+{
+  "title": "test-nf",
+  "description": "Simulated workload workflow",
+  "type": "object",
+  "properties": {
+    "itersA": {
+      "title": "#Iterations for process A",
+      "type": "integer",
+      "default": 5,
+      "minimum": 1,
+      "maximum": 10
+    },
+    "itersB": {
+      "title": "#Iterations for process B",
+      "type": "integer",
+      "default": 5,
+      "minimum": 1,
+      "maximum": 10
+    },
+    "itersC": {
+      "title": "#Iterations for process C",
+      "type": "integer",
+      "default": 5,
+      "minimum": 1,
+      "maximum": 10
+    },
+    "itersDependsOnC": {
+      "title": "#Iterations process DependsOnC",
+      "type": "integer",
+      "default": 1,
+      "minimum": 1,
+      "maximum": 10
+    },
+    "itersDependsOnBothAandB": {
+      "title": "#Iterations process DependsOnBothAandB ",
+      "type": "integer",
+      "default": 1,
+      "minimum": 1,
+      "maximum": 10
+    },
+    "numSimulatedContentA": {
+      "title": "#Simulated Contents for process A",
+      "type": "integer",
+      "default": 1,
+      "minimum": 1,
+      "maximum": 5
+    },
+    "numSimulatedContentB": {
+      "title": "#Simulated Contents for process B",
+      "type": "integer",
+      "default": 2,
+      "minimum": 1,
+      "maximum": 5
+    },
+    "filesGlob": {
+      "title": "Files glob pattern",
+      "type": "string",
+      "default": "/glob/for/example/*"
+    },
+    "filesPath": {
+      "title": "Files Path",
+      "type": "string",
+      "default": "/glob/for/example"
+    }
+  }
+}
