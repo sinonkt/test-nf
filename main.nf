@@ -20,11 +20,11 @@ def unifyParams = { params ->
 }
 
 if (params.containsKey('paramsSchema') && params.paramsSchema) {
-  print(file('params_schema.json').text)
+  print(file("${workflow.projectDir}/params_schema.json").text)
   exit 1
 }
 if (params.containsKey('uiSchema') && params.uiSchema) {
-  print(file('ui_schema.json').text)
+  print(file("${workflow.projectDir}/ui_schema.json").text)
   exit 1
 }
 
